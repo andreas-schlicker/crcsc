@@ -5,6 +5,7 @@
 ###############################################################################
 
 library(synapseClient)
+library(rGithubClient)
 library(stringr)
 library(GEOquery)
 
@@ -12,6 +13,10 @@ synapseLogin()
 
 load(getFileLocation(synGet("syn2431652")))
 load("/srv/nfs4/medoid-bulk/NKI/a.schlicker/CRC_SUBTYPES/cms_classification.rdata")
+
+# GitHib repository
+crcRepo = getRepo("andreas-schlicker/crcsc")
+thisScript = getPermlink(crcRepo, "groups/F/denovo/translate_sample_names.r")
 
 # We need the GEO entry for the AMC set
 gse33113 = getGEO("GSE33113")
@@ -47,3 +52,20 @@ names(all.ids.rev) = all.ids
 save(all.ids, all.ids.rev, file="/srv/nfs4/medoid-bulk/NKI/a.schlicker/CRC_SUBTYPES/cms_classification_id_translation.rdata")
 
 
+# List with used resources
+resources = list(list(entity="syn2431652", wasExecuted=F),
+				 list(url=thisScript, name=basename(thisScript), wasExecuted=T))
+
+# Store results in synapse and forget about the temporary file 
+synFile = File(path="/srv/nfs4/medoid-bulk/NKI/a.schlicker/CRC_SUBTYPES/cms_classification_id_translation.rdata", 
+			   parentId="syn2502277")
+failed = TRUE
+tries = 0
+while (failed && (tries < 5)) {
+	res = tryCatch(synStore(synFile, used=resources),
+			error=function(e) NA)
+	if (!is.na(res)) {
+		failed=FALSE
+	}
+	tries = tries + 1
+}
