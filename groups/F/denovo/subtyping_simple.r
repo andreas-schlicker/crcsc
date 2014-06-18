@@ -123,16 +123,33 @@ subtypeDf = cbind(subtypeDf,
 #table(subtypeDf[, c("subtype", "cms5")])
 #table(subtypeDf[, c("subtype", "dataset")])
 
-# Save the subtyping result in Synapse
+### Save the subtyping result in Synapse
 # Write temporary file
 filePath = file.path(tempdir(), "iNMF_denovo_subtyping_simple.tsv")
 write.table(subtypeDf, file=filePath, sep="\t", quote=FALSE)
-
 # List with used resources
 resources = list(list(entity="syn2431652", wasExecuted=F),
 				 list(entity="syn2502279", wasExecuted=F),
 				 list(url=thisScript, name=basename(thisScript), wasExecuted=T))
 
+# And upload 
+synFile = File(path=filePath, parentId="syn2502277")
+failed = TRUE
+tries = 0
+while (failed && (tries < 5)) {
+	res = tryCatch(synStore(synFile, used=resources),
+			error=function(e) NA)
+	if (!is.na(res)) {
+		failed=FALSE
+	}
+	tries = tries + 1
+}
+unlink(filePath)
+
+
+### Save the object
+filePath = file.path(tempdir(), "iNMF_denovo_subtyping_simple.rdata")
+save(inmfSubtypes, subtypes, subtypeDf, file=filePath)
 # And upload 
 synFile = File(path=filePath, parentId="syn2502277")
 failed = TRUE
