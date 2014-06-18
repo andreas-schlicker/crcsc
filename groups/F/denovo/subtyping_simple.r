@@ -163,3 +163,15 @@ while (failed && (tries < 5)) {
 	tries = tries + 1
 }
 unlink(filePath)
+
+# Plot the co-clustering matrices
+#for (n in names(inmfSubtypes)) {
+#	png(paste(n, "consensusmap.png", sep="_"), width=4000, height=3000, res=300)
+#	consensusmap(inmfSubtypes[[n]]$nmfRun[[1]],
+#				 annRow=subtypeDf[sampleNames(inmfSubtypes[[n]]$nmfRun[[1]]), c("subtype", "cms4", "cms5")],
+#				 annCol=subtypeDf[sampleNames(inmfSubtypes[[n]]$nmfRun[[1]]), c("subtype", "cms4", "cms5")],
+#				 annColors=list(cms4=c(CMS1="#999999", CMS2="#E69F00", CMS3="#56B4E9", CMS4="#009E73"),
+#						 		cms5=c(CMS1="#999999", CMS2="#E69F00", "CMS2,CMS5"="#E69F00", CMS3="#56B4E9", 
+#									   CMS4="#009E73", "CMS4,CMS5"="#009E73", CMS5="#D55E00")))
+#	dev.off()
+#}
