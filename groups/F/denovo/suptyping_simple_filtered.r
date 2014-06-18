@@ -57,7 +57,7 @@ for (n in names(inmfSubtypes)) {
 
 rownames(subtypeDf) = all.ids.rev[rownames(subtypeDf)]
 
-#> table(subtypeDf[, "subtype"] == subtypeDf[, "subtypeFiltered"])                                                                                                                                                                                                     [156/648]
+#> table(subtypeDf[, "subtype"] == subtypeDf[, "subtypeFiltered"])
 #
 #FALSE  TRUE
 #  260  4235
@@ -86,7 +86,7 @@ tries = 0
 while (failed && (tries < 5)) {
 	res = tryCatch(synStore(synFile, used=resources),
 			error=function(e) NA)
-	if (!is.na(res)) {
+	if (class(res) == "File") {
 		failed=FALSE
 	}
 	tries = tries + 1
@@ -104,7 +104,7 @@ tries = 0
 while (failed && (tries < 5)) {
 	res = tryCatch(synStore(synFile, used=resources),
 			error=function(e) NA)
-	if (class(res) != "File") {
+	if (class(res) == "File") {
 		failed=FALSE
 	}
 	tries = tries + 1
