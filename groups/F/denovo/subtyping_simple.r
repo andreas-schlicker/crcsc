@@ -15,6 +15,8 @@ synapseLogin()
 
 # GitHib repository
 crcRepo = getRepo("andreas-schlicker/crcsc")
+iNMFFunctions = getPermlink(crcRepo, "groups/F/denovo/inmf.r")
+sourceRepoFile(crcRepo, "groups/F/denovo/inmf.r")
 thisScript = getPermlink(crcRepo, "groups/F/denovo/subtyping_simple.r")
 
 # Merged expression dataset
@@ -130,6 +132,7 @@ write.table(subtypeDf, file=filePath, sep="\t", quote=FALSE)
 # List with used resources
 resources = list(list(entity="syn2431652", wasExecuted=F),
 				 list(entity="syn2502279", wasExecuted=F),
+				 list(url=iNMFFunctions, name=basename(iNMFFunctions), wasExecuted=F),
 				 list(url=thisScript, name=basename(thisScript), wasExecuted=T))
 
 # And upload 
